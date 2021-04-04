@@ -34,6 +34,7 @@ const data: Person[] = [
 
 function App() {
   const [panel, setPanel] = React.useState<boolean>(false);
+  const [panelIndex, setPanelIndex] = React.useState<number>(0);
 
   return (
     <div className="App">
@@ -42,8 +43,8 @@ function App() {
           Primary
         </Button>
         <TextField id="standard-basic" label="Standard"/>
-        <Panel panel={panel}/>
-        <ContactsList list={data}/>
+        <Panel panel={panel} index={panelIndex}/>
+        <ContactsList list={data} setPanelIndex={setPanelIndex}/>
       </header>
     </div>
   );

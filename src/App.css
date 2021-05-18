@@ -29,4 +29,18 @@ li {
 }
 html, body, #root, .App, .App-header, .listParent {
     height: 100%;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+.contactListItem {
+    background-color: lightgrey;
+    border-radius: 10px;
+    margin: 1%;
+    width: 20%;
+    justify-content: center;
+    cursor: pointer;
+}
+.contactListContent {
+    margin: 1%;
+    text-align: center;
 }

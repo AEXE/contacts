@@ -3,4 +3,5 @@ export type Contact = {
     first: string,
     last: string,
   }
+  id: Number
 }

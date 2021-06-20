@@ -4,55 +4,48 @@ import {Panel} from './panel'
 import React, {ChangeEvent, useEffect, useState} from "react";
 import {ContactsList} from "./list";
 import {SyntheticEvent} from "react";
-import {UseFetch} from "./utils/useFetch";
 import emptyContact, {Contact} from "./type";
 
 function App() {
   const [panel, setPanel] = useState<boolean>(false);
-
-  const [status, setStatus] = useState<
-    "initial" | "loading" | "success" | "error"
-    >("initial")
   const [data, setData] = useState<Contact[] | null>(null)
   const [filteredData, setFilteredData] = useState<Contact[] | null>(null)
-  const [error, setError] = useState<"string" | null>(null)
+  const [create, setCreate] = useState<boolean>(false)
 
 
   const [panelData, setPanelData] = useState<Contact>(emptyContact);
-  const [reloadData, setReloadData] = useState<boolean>(false);
-
+  const [reloadData, setReloadData] = useState<boolean>(true);
 
 
   useEffect(() => {
-    console.log('go')
-    setStatus("loading");
-    setError(null);
-
-    fetch('http://localhost:3000/contacts/')
-      .then<Contact[]>((res) => res.json())
-      .then((data) => {
-        setData(data);
-        setFilteredData(data);
-        setStatus("success");
-      })
-      .catch((err) => {
-        setError(err.message);
-        setStatus("error");
-      })
+    if (reloadData) {
+      fetch('http://localhost:3000/contacts/')
+        .then<Contact[]>((res) => res.json())
+        .then((data) => {
+          setData(data);
+          setFilteredData(data);
+        })
+        .catch((err) => {
+        })
+      setReloadData(false)
+    }
   }, [reloadData])
+
   function handleParentClick() {
     setPanel(false)
   }
 
-  function setPanelDataAndOpenPanel(e: SyntheticEvent, contact: Contact) {
+  function setPanelDataAndOpenPanel(e: SyntheticEvent, contact: Contact, create: boolean) {
     e.stopPropagation();
     setPanelData(contact);
     setPanel(true);
+    setCreate(create)
   }
-  function filterResults (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+
+  function filterResults(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     if (data) {
       let filter = data?.filter(function (e) {
-        return e.name.first.includes(event.target.value) || e.name.last.includes(event.target.value);
+        return e.first.includes(event.target.value) || e.last.includes(event.target.value);
       });
       setFilteredData(filter);
     }
@@ -67,17 +60,23 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div className="content">
-          <Button variant="contained" color="primary">
-            Primary
-          </Button>
-          <TextField label="Standard" onChange={(e) => filterResults(e)}/>
-          <div className="listParent" onClick={() => handleParentClick()}>
-            <ContactsList list={filteredData ? filteredData : undefined} setPanelData={setPanelDataAndOpenPanel}/>
+        <div className="content" onClick={() => handleParentClick()}>
+          <div className="topBar">
+            <div className="searchContainer">
+              <TextField label="Search" onChange={(e) => filterResults(e)}/>
+            </div>
+            <Button className="create" variant="contained" color="primary"
+                    onClick={(e) => setPanelDataAndOpenPanel(e, emptyContact, true)}>
+              Create
+            </Button>
           </div>
-          <div className={panel ? "panel panelOpen" : "panel"}>
-            <Panel contact={panelData} create={false} reloadData={setReloadData}/>
+          <div className="listParent">
+            <ContactsList list={filteredData ? filteredData : undefined} setPanelData={setPanelDataAndOpenPanel} reloadData={setReloadData}/>
           </div>
+        </div>
+
+        <div className={panel ? "panel panelOpen" : "panel"}>
+          <Panel contact={panelData} create={create} reloadData={setReloadData}/>
         </div>
 
       </header>

@@ -1,23 +1,44 @@
 import * as React from "react"
 import {Contact} from "./type";
+import {Button} from "@material-ui/core";
+export function ContactsList(props: {list?: Contact[], setPanelData: Function, reloadData: Function}) {
 
-export function ContactsList(props: {list?: Contact[], setPanelData: Function}) {
 
-
-
+  const deleteCustomer = async (index: number) => {
+    fetch("http://localhost:3000/contacts/" + index, {
+      method: "DELETE",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+      .then((res) => console.log(res.json()))
+      .then((data) => {
+        props.reloadData(true);
+      })
+      .catch((err) => {
+        alert(err)
+      })
+  }
   //"panel" + props.panel ? " panelOpen" : ""
   return <ul className="contactList">
     {props.list && props.list.map((contact, index) => {
       return (
-        <li  className="contactListItem" onClick={(event) => props.setPanelData(event, contact)} key={index}>
-          <div className="contactListContent">
-            <div className="contactListItemFirstName">
-              {contact.name.first}
+        <li  className="contactListItem" key={"contact"+index} >
+          <div className="contactListContent" onClick={(event) => props.setPanelData(event, contact, false)} key={index}>
+            <div className="contactListText">
+              {contact.first + " " + contact.last}
             </div>
-            <div className="contactListItemLastName">
-              {contact.name.last}
+            <div className="contactListText">
+              {contact.email}
             </div>
+            <div className="contactListText">
+              {contact.birthdate}
+            </div>
+
           </div>
+            <Button variant="contained" className="deleteButton" color="default" onClick={() => deleteCustomer(contact.id)}>
+              Delete
+            </Button>
         </li>
       )
     })

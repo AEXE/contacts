@@ -1,8 +1,6 @@
 export type Contact = {
-  name: {
-    first: string,
-    last: string,
-  }
+  first: string,
+  last: string,
   id: number
   email: string,
   birthdate: string,
@@ -11,20 +9,16 @@ export type Contact = {
 }
 
 export type UpdatedContact = {
-  name: {
-    first: string,
-    last: string,
-  }
+  first: string,
+  last: string,
   email: string,
   birthdate: string,
   notes: string,
 }
 
 let emptyContact = {
-  name: {
-    first: "",
-    last: "",
-  },
+  first: "",
+  last: "",
   id: -1,
   email: "",
   birthdate: "",

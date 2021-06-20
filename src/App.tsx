@@ -1,27 +1,43 @@
 import './App.css';
 import {TextField, Button} from "@material-ui/core";
 import {Panel} from './panel'
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {ContactsList} from "./list";
 import {SyntheticEvent} from "react";
 import {UseFetch} from "./utils/useFetch";
-import {Contact} from "./type";
+import emptyContact, {Contact} from "./type";
 
 function App() {
   const [panel, setPanel] = useState<boolean>(false);
 
-  const { status, data, error } = UseFetch<Contact[]>(
-    `http://localhost:3000/contacts/`,
-  )
-  console.log(data);
-  const [panelData, setPanelData] = useState<Contact>({
-    name: {
-      first: "",
-      last: "",
-    },
-    id: 0
-  });
+  const [status, setStatus] = useState<
+    "initial" | "loading" | "success" | "error"
+    >("initial")
+  const [data, setData] = useState<Contact[] | null>(null)
+  const [error, setError] = useState<"string" | null>(null)
 
+
+  const [panelData, setPanelData] = useState<Contact>(emptyContact);
+  const [reloadData, setReloadData] = useState<boolean>(false);
+
+
+
+  useEffect(() => {
+    console.log('go')
+    setStatus("loading");
+    setError(null);
+
+    fetch('http://localhost:3000/contacts/')
+      .then<Contact[]>((res) => res.json())
+      .then((data) => {
+        setData(data);
+        setStatus("success");
+      })
+      .catch((err) => {
+        setError(err.message);
+        setStatus("error");
+      })
+  }, [reloadData])
   function handleParentClick() {
     setPanel(false)
   }
@@ -30,6 +46,12 @@ function App() {
     e.stopPropagation();
     setPanelData(contact);
     setPanel(true);
+  }
+
+  function reloadListData(index: number, contact: Contact) {
+    if (data) {
+      data[index] = contact;
+    }
   }
 
   return (
@@ -43,7 +65,9 @@ function App() {
           <div className="listParent" onClick={() => handleParentClick()}>
             <ContactsList list={data ? data : undefined} setPanelData={setPanelDataAndOpenPanel}/>
           </div>
-          <Panel panel={panel} contact={panelData} create={false}/>
+          <div className={panel ? "panel panelOpen" : "panel"}>
+            <Panel contact={panelData} create={false} reloadData={setReloadData}/>
+          </div>
         </div>
 
       </header>

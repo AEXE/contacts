@@ -1,7 +1,7 @@
 import './App.css';
 import {TextField, Button} from "@material-ui/core";
 import {Panel} from './panel'
-import React, {useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect, useState} from "react";
 import {ContactsList} from "./list";
 import {SyntheticEvent} from "react";
 import {UseFetch} from "./utils/useFetch";
@@ -14,6 +14,7 @@ function App() {
     "initial" | "loading" | "success" | "error"
     >("initial")
   const [data, setData] = useState<Contact[] | null>(null)
+  const [filteredData, setFilteredData] = useState<Contact[] | null>(null)
   const [error, setError] = useState<"string" | null>(null)
 
 
@@ -31,6 +32,7 @@ function App() {
       .then<Contact[]>((res) => res.json())
       .then((data) => {
         setData(data);
+        setFilteredData(data);
         setStatus("success");
       })
       .catch((err) => {
@@ -47,6 +49,14 @@ function App() {
     setPanelData(contact);
     setPanel(true);
   }
+  function filterResults (event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+    if (data) {
+      let filter = data?.filter(function (e) {
+        return e.name.first.includes(event.target.value) || e.name.last.includes(event.target.value);
+      });
+      setFilteredData(filter);
+    }
+  }
 
   function reloadListData(index: number, contact: Contact) {
     if (data) {
@@ -61,9 +71,9 @@ function App() {
           <Button variant="contained" color="primary">
             Primary
           </Button>
-          <TextField label="Standard"/>
+          <TextField label="Standard" onChange={(e) => filterResults(e)}/>
           <div className="listParent" onClick={() => handleParentClick()}>
-            <ContactsList list={data ? data : undefined} setPanelData={setPanelDataAndOpenPanel}/>
+            <ContactsList list={filteredData ? filteredData : undefined} setPanelData={setPanelDataAndOpenPanel}/>
           </div>
           <div className={panel ? "panel panelOpen" : "panel"}>
             <Panel contact={panelData} create={false} reloadData={setReloadData}/>

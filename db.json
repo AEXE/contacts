@@ -1,67 +1,52 @@
 {
   "contacts": [
     {
-      "first": "aaaa",
-      "last": "aaaaa",
-      "id": 1,
-      "email": "aaaa",
-      "birthdate": "",
+      "first": "Luke",
+      "last": " Skylwalker",
+      "email": "luke.skylwalker@tatooine.com",
+      "birthdate": "01/01/1984",
       "notes": "",
-      "": ""
+      "id": 1
     },
     {
-      "first": "bbbb",
-      "last": "bbbb",
-      "email": "bbbb",
-      "birthdate": "bbb",
-      "notes": "bbb",
-      "id": 2,
-      "": ""
-    },
-    {
-      "first": "aaaa",
-      "last": "aaaaa",
-      "id": 3,
-      "email": "aaaaaaa",
-      "birthdate": "aaaa",
+      "first": "Obi-Wan",
+      "last": " Kenobi",
+      "email": "obi.kenobi@starship.com",
+      "birthdate": "22/11/1964",
       "notes": "",
-      "": ""
+      "id": 2
     },
     {
-      "first": "aaa",
-      "last": "aaaaa",
-      "email": "aaaa",
-      "birthdate": "aaaaaa",
-      "notes": "aaa",
-      "": "",
+      "first": "Master",
+      "last": " Yoda",
+      "email": "master.yoda@dagoba.com",
+      "birthdate": "03/12/1493",
+      "notes": "",
+      "id": 3
+    },
+    {
+      "first": "Jar-Jar",
+      "last": " Binks",
+      "email": "jar.binks@naboo.com",
+      "birthdate": "27/14/1953",
+      "notes": "",
       "id": 4
     },
     {
-      "first": "vv",
-      "last": "vv",
-      "email": "",
-      "birthdate": "",
+      "first": "Senator",
+      "last": "Palpatine",
+      "email": "senator.palpatine@naboo.com",
+      "birthdate": "14/10/1934",
       "notes": "",
-      "": "",
       "id": 5
     },
     {
-      "first": "llalala",
-      "last": "lalalala",
-      "email": "aa",
-      "birthdate": "",
+      "first": "Jean-Michel",
+      "last": "Roue-Libre",
+      "email": "jm.rl@msn.com",
+      "birthdate": "10/10/1994",
       "notes": "",
-      "": "",
       "id": 6
-    },
-    {
-      "first": "aaaaa",
-      "last": "",
-      "id": -1,
-      "email": "",
-      "birthdate": "",
-      "notes": "",
-      "": ""
     }
   ]
 }

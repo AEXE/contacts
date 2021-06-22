@@ -11,6 +11,7 @@ export function Panel(props: { contact: Contact, create: boolean, reloadData: Di
 
   const [editedContact, setEditedContact] = useState<Contact>(props.contact);
   const [cantSave, setCantSave] = useState<boolean>(true);
+  const [create, setCreate] = useState<boolean>(props.create);
   const [updatedProperty, setUpdatedProperty] = useState<UpdateProperty>({property: "", value: ""});
 
 
@@ -22,6 +23,10 @@ export function Panel(props: { contact: Contact, create: boolean, reloadData: Di
     }
     setUpdatedProperty(updatedField);
   }
+  useEffect(() => {
+    setCreate(props.create);
+  }, [props.create]);
+
   useEffect(() => {
     setEditedContact(props.contact);
   }, [props.contact]);
@@ -42,8 +47,8 @@ export function Panel(props: { contact: Contact, create: boolean, reloadData: Di
     } else {
       delete contact.id
     }
-    fetch("http://localhost:3000/contacts/" + (!props.create ? contact.id : ""), {
-      method: props.create ? "POST" : "PUT",
+    fetch("http://localhost:3000/contacts/" + (!create ? contact.id : ""), {
+      method: create ? "POST" : "PUT",
       headers: {
         'Content-Type': 'application/json'
       },
@@ -52,14 +57,13 @@ export function Panel(props: { contact: Contact, create: boolean, reloadData: Di
       .then((res) => {})
       .then((data) => {
         props.reloadData(true);
+        setCreate(false);
       })
       .catch((err) => {
         alert(err);
       })
   }
 
-  //const canSave = JSON.stringify(editedContact) !== JSON.stringify(props.contact);
-  //"panel" + props.panel ? " panelOpen" : ""
   return <ul className="inputs">
     <li key={"paneFirstlKey" + props.contact.first}>
       <TextField name="first" defaultValue={props.contact.first} label="First Name" onChange={handleChange}/>

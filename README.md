@@ -1,15 +1,12 @@
 # Contacts Editor Alfred EXERTIER
 
 
-## Available Scripts
+## Back-end
 
-In the project directory, you can run:
+Copy db.json file in a folder and run ``json-server --watch db.json``
 
-### `npm start`
+## Front-End
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Runs the app in the development mode with ``npm start`` and tape ``y`` to launch in  [http://localhost:3001](http://localhost:3001) and to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 

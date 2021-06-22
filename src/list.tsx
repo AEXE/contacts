@@ -4,14 +4,15 @@ import {Button} from "@material-ui/core";
 export function ContactsList(props: {list?: Contact[], setPanelData: Function, reloadData: Function}) {
 
 
-  const deleteCustomer = async (index: number) => {
+  const deleteCustomer = async (index: number | undefined) => {
+    if (!index) return;
     fetch("http://localhost:3000/contacts/" + index, {
       method: "DELETE",
       headers: {
         'Content-Type': 'application/json'
       },
     })
-      .then((res) => console.log(res.json()))
+      .then((res) => {})
       .then((data) => {
         props.reloadData(true);
       })

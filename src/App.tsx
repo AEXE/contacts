@@ -37,9 +37,9 @@ function App() {
 
   function setPanelDataAndOpenPanel(e: SyntheticEvent, contact: Contact, create: boolean) {
     e.stopPropagation();
+    setCreate(create)
     setPanelData(contact);
     setPanel(true);
-    setCreate(create)
   }
 
   function filterResults(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
@@ -75,9 +75,9 @@ function App() {
           </div>
         </div>
 
-        <div className={panel ? "panel panelOpen" : "panel"}>
+        {panel && <div className="panel">
           <Panel contact={panelData} create={create} reloadData={setReloadData}/>
-        </div>
+        </div>}
 
       </header>
     </div>

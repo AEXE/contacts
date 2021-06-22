@@ -11,12 +11,8 @@ export function Panel(props: { contact: Contact, create: boolean, reloadData: Di
 
   const [editedContact, setEditedContact] = useState<Contact>(props.contact);
   const [cantSave, setCantSave] = useState<boolean>(true);
-  const [create, setCreate] = useState<boolean>(false);
   const [updatedProperty, setUpdatedProperty] = useState<UpdateProperty>({property: "", value: ""});
 
-  useEffect(() => {
-    setCreate(props.create);
-  },);
 
   function handleChange(evt: any) {
     // @ts-ignore
@@ -26,6 +22,10 @@ export function Panel(props: { contact: Contact, create: boolean, reloadData: Di
     }
     setUpdatedProperty(updatedField);
   }
+  useEffect(() => {
+    setEditedContact(props.contact);
+  }, [props.contact]);
+
 
   useEffect(() => {
     let contact = {...editedContact};
@@ -37,20 +37,20 @@ export function Panel(props: { contact: Contact, create: boolean, reloadData: Di
   const upsertCustomer = async () => {
     const {...contact} = editedContact;
     // @ts-ignore
-    if (!create) {
+    if (!props.create) {
       contact.id = props.contact.id
-
+    } else {
+      delete contact.id
     }
-    fetch("http://localhost:3000/contacts/" + (!create ? contact.id : ""), {
+    fetch("http://localhost:3000/contacts/" + (!props.create ? contact.id : ""), {
       method: props.create ? "POST" : "PUT",
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(contact)
     })
-      .then((res) => console.log(res.json()))
+      .then((res) => {})
       .then((data) => {
-        setCreate(false)
         props.reloadData(true);
       })
       .catch((err) => {
@@ -61,7 +61,6 @@ export function Panel(props: { contact: Contact, create: boolean, reloadData: Di
   //const canSave = JSON.stringify(editedContact) !== JSON.stringify(props.contact);
   //"panel" + props.panel ? " panelOpen" : ""
   return <ul className="inputs">
-    {create ? <h4>Create Contact</h4> : <h4>Modify Contact</h4>}
     <li key={"paneFirstlKey" + props.contact.first}>
       <TextField name="first" defaultValue={props.contact.first} label="First Name" onChange={handleChange}/>
     </li>
@@ -72,10 +71,12 @@ export function Panel(props: { contact: Contact, create: boolean, reloadData: Di
       <TextField name="email" defaultValue={props.contact.email} label="Email" onChange={handleChange}/>
     </li>
     <li key={"panelBirthdateKey" + props.contact.birthdate}>
-      <TextField name="birthdate" defaultValue={props.contact.birthdate} label="Birthday" onChange={handleChange}/>
+      <TextField name="birthdate" label="birthdate" type="date" defaultValue={props.contact.birthdate} InputLabelProps={{
+        shrink: true,
+      }} onChange={handleChange}/>
     </li>
     <li key={"panelNotesKey" + props.contact.notes}>
-      <TextField name="notes" defaultValue={props.contact.notes} label="Notes" onChange={handleChange}/>
+      <TextField name="notes" defaultValue={props.contact.notes} multiline rows={2} rowsMax={8} label="Notes" onChange={handleChange}/>
     </li>
     <li>
       <Button variant="contained" color="primary" onClick={upsertCustomer} disabled={cantSave}>

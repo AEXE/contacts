@@ -1,20 +1,12 @@
 export type Contact = {
   first: string,
   last: string,
-  id: number
+  id?: number
   email: string,
   birthdate: string,
   notes: string,
-  edited?: boolean
 }
 
-export type UpdatedContact = {
-  first: string,
-  last: string,
-  email: string,
-  birthdate: string,
-  notes: string,
-}
 
 let emptyContact = {
   first: "",
